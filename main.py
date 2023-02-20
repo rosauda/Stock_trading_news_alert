@@ -35,49 +35,36 @@ stock_data = response.json()
 
 # Extract last day that the data was refreshed
 stock_last_refreshed = stock_data["Meta Data"]["3. Last Refreshed"]
-print(stock_last_refreshed)
 
 # Extract open and close price
 stock_open = float(stock_data["Time Series (Daily)"][stock_last_refreshed]['1. open'])
 stock_close = float(stock_data["Time Series (Daily)"][stock_last_refreshed]['4. close'])
 
 # Check price variance
-price_change = round(abs((stock_close/stock_open - 1) * 100), 2)
+difference = round(abs(stock_close - stock_open))
+variance = (difference / stock_close) * 100
 
 # ---------------------------- GETTING STOCK NEWS ------------------------------- #
 
-get_news = False
-if price_change > 5:
-    get_news = True
+if variance > 1:
 
-response = requests.get(NEWS_ENDPOINT, params=parameters_news)
+    # Get news
+    response = requests.get(NEWS_ENDPOINT, params=parameters_news)
+    # Raising errors and exceptions
+    response.raise_for_status()
+    # Data to json
+    stock_news = response.json()["data"][0]['entities'][0]['highlights']
+    print(stock_news)
+    print(len(stock_news))
 
-# Raising errors and exceptions
-response.raise_for_status()
+    new_list = [stock_news[news]['highlight'] for news in range(0, len(stock_news))]
+    print(f"highlight: {new_list[0]} \nhighlight: {new_list[1]}")
 
-# Data to json
-stock_news = response.json()
-stock_news = stock_news["data"][0]['entities'][0]['highlights']
-print(stock_news)
-print(len(stock_news))
-
-for items in range(0, len(stock_news)):
-    print(stock_news[items]['highlight'])
-
-
-## STEP 2: Use https://newsapi.org/docs/endpoints/everything
-# Instead of printing ("Get News"), actually fetch the first 3 articles for the COMPANY_NAME. 
-#HINT 1: Think about using the Python Slice Operator
+else:
+    print("Do not get news")
 
 
 
-## STEP 3: Use twilio.com/docs/sms/quickstart/python
-# Send a separate message with each article's title and description to your phone number. 
-#HINT 1: Consider using a List Comprehension.
-
-
-
-#Optional: Format the SMS message like this: 
 """
 TSLA: 🔺2%
 Headline: Were Hedge Funds Right About Piling Into Tesla Inc. (TSLA)?. 
