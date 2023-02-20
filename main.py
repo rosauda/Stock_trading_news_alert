@@ -1,6 +1,7 @@
 import requests
 import os
 import datetime as date
+import html
 
 # ---------------------------- VARIABLES ------------------------------- #
 
@@ -58,24 +59,10 @@ if variance > 1:
     print(len(stock_news))
 
     new_list = [stock_news[news]['highlight'] for news in range(0, len(stock_news))]
-    print(f"highlight: {new_list[0]} \nhighlight: {new_list[1]}")
+    print(f"highlight:{new_list[0]}\nhighlight:{new_list[1]}")
 
 else:
     print("Do not get news")
 
 
-
-"""
-TSLA: 🔺2%
-Headline: Were Hedge Funds Right About Piling Into Tesla Inc. (TSLA)?. 
-Brief: We at Insider Monkey have gone over 821 13F filings that hedge funds and prominent investors are required to file 
-by the SEC The 13F filings show the funds' and investors' portfolio positions as of March 31st, near the height of the 
-coronavirus market crash.
-or
-"TSLA: 🔻5%
-Headline: Were Hedge Funds Right About Piling Into Tesla Inc. (TSLA)?. 
-Brief: We at Insider Monkey have gone over 821 13F filings that hedge funds and prominent investors are required to file 
-by the SEC The 13F filings show the funds' and investors' portfolio positions as of March 31st, near the height of the 
-coronavirus market crash.
-"""
 
